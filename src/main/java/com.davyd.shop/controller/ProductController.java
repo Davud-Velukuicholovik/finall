@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -42,5 +43,8 @@ public class ProductController {
     public ProductResponse findOne(@PathVariable Long id) {
         return productService.findOneResponse(id);
     }
-
+//    @PostMapping("/findByFilter")
+//    public List<ProductResponse> findByFilter(@Valid @RequestBody ProductCriteria productCriteria) {
+//        return productService.findByCriteria(productCriteria);
+//    }
 }

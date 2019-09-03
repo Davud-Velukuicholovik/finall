@@ -21,19 +21,16 @@ import java.util.List;
 @Setter
 
 @Entity
-@Table(name = "_order")
+@Table(name = "_Order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    @Future
     private LocalDate date;
-    @NotNull
-    @NumberFormat
+    private LocalTime time;
     private String phoneNumber;
-    @NotNull
     private String address;
+    private Boolean finished;
 
     @OneToMany(mappedBy = "order")
     private List<ProductCount> productCounts = new ArrayList<>();

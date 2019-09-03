@@ -1,10 +1,7 @@
 package com.davyd.shop.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -13,6 +10,7 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 
 @Entity
 public class ProductCount {
@@ -27,4 +25,7 @@ public class ProductCount {
 
     @ManyToOne
     private Order order;
+
+    @ManyToOne
+    private Cart cart;
 }

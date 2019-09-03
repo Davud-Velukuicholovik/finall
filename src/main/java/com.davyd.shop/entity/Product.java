@@ -25,7 +25,7 @@ public class Product {
     @Positive
     private Long price;
 
-    private String photo;
+//    private String photo;
 
     @Column(columnDefinition = "text")
     private String description;
@@ -37,8 +37,12 @@ public class Product {
     @ManyToOne
     private Subcategory subcategory;
 
+    @OneToMany(mappedBy = "product")
+    private List<ProductCount> productCounts = new ArrayList<>();
+
     @ManyToMany(mappedBy = "favoriteProducts")
     private List<User> users = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "products")
     private List<Comment> comments = new ArrayList<>();

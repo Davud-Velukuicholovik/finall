@@ -2,15 +2,12 @@ package com.davyd.shop.service;
 
 import com.davyd.shop.dto.request.CommentRequest;
 import com.davyd.shop.dto.response.CommentResponse;
-import com.davyd.shop.dto.response.PageResponse;
 import com.davyd.shop.entity.Comment;
 import com.davyd.shop.entity.Product;
 import com.davyd.shop.entity.User;
 import com.davyd.shop.exception.NoMatchesException;
 import com.davyd.shop.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -59,12 +56,8 @@ comment.setComment(request.getComments());
         comment.setComment(request.getComments());
         return comment;
     }
-//    public PageResponse<CommentResponse> find_Page(Integer page, Integer size, String fieldName, Sort.Direction direction) {
-//        Page<Comment> data = commentRepository.findAll(PageRequest.of(page, size, direction, fieldName));
-//        List<CommentResponse> collect = data.get().map(CommentResponse::new).collect(Collectors.toList());
-//        return new PageResponse<>(data.getTotalElements(),
-//                data.getTotalPages(),
-//                collect);
-//
-//    }
+    public List<CommentResponse> findAllByUsersId(Long userId) {
+        return commentRepository.findAllByUserId(userId).stream().
+                map(CommentResponse::new).collect(Collectors.toList());
+    }
 }

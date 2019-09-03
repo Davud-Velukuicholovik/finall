@@ -54,9 +54,9 @@ public class ProductService {
         if (product == null) {
             product = new Product();
         }
-        if (request.getPhoto() != null) {
-            product.setPhoto(fileService.saveFile(request.getPhoto()));
-        }
+//        if (request.getPhoto() != null) {
+//            product.setPhoto(fileService.saveFile(request.getPhoto()));
+//        }
         product.setName(request.getName());
         product.setPrice(request.getPrice());
         product.setDescription(request.getDescription());
@@ -64,4 +64,15 @@ public class ProductService {
         product.setSubcategory(subcategoryService.findOne(request.getSubcategoryId()));
         return product;
     }
+//    public List<ProductResponse> findByCriteria(ProductCriteria criteria) {
+//        return productRepository.findAll(new ProductSpecification(criteria), criteria.getPaginationRequest().toPageable())
+//                .stream().map(ProductResponse::new).collect(Collectors.toList());
+//    }
+//    public PageResponse<ProductResponse> findPage(PaginationRequest paginationRequest) {
+//        Page<Product> page = productRepository.findAll(paginationRequest.toPageable());
+//        return new PageResponse<>(page.getTotalPages(),
+//                page.getTotalElements(),
+//                page.get().map(ProductResponse::new).collect(Collectors.toList()));
+//    }
+
 }

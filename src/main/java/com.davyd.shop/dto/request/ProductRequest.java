@@ -17,7 +17,7 @@ public class ProductRequest {
     @DecimalMax("5.0")
     private Double rating;
     private String description;
-    private String photo;
+//    private String photo;
     @NotNull
     private Long subcategoryId;
 

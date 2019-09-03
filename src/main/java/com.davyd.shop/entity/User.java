@@ -1,7 +1,6 @@
 package com.davyd.shop.entity;
 
 import lombok.*;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,9 +22,11 @@ public class User {
 
     @ManyToMany
     private List<Product> favoriteProducts = new ArrayList<>();
-//////////////////////
+
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "users")
     private List<Order> orders = new ArrayList<>();
+    @OneToOne
+    private Cart cart;
 }

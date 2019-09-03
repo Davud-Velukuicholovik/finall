@@ -33,17 +33,13 @@ public class CommentController {
         return commentService.findAll(fieldName);
     }
 
-////    @GetMapping
-////    public PageResponse<CommentResponse> find_Page(
-////            @RequestParam Integer page,
-////            @RequestParam Integer size,
-////            @RequestParam(defaultValue = "name") String fieldName,
-////            @RequestParam(defaultValue = "ASC") Sort.Direction direction
-////    ) {
-////        return commentService.find_Page(page, size, fieldName, direction);
-////    }
     @PutMapping
     public void update(@Valid @RequestBody CommentRequest request, Long id) throws IOException {
         commentService.update(request, id);
     }
+    @GetMapping("/byUserId/{userId}")
+    public List<CommentResponse> findAllByUsersId(@PathVariable Long userId) {
+        return commentService.findAllByUsersId(userId);
+    }
+
 }
