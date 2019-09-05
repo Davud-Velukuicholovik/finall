@@ -10,20 +10,16 @@ import javax.validation.constraints.*;
 public class ProductRequest {
     @NotBlank
     private String name;
-
     @Positive
     @NotNull
     private Long price;
-
-    @NotNull
     @DecimalMin("0.1")
     @DecimalMax("5.0")
     private Double rating;
-    @NotBlank
     private String description;
-
+    private String photo;
     @NotNull
     private Long subcategoryId;
-    @NotBlank
-    private String photo;
+
+
 }

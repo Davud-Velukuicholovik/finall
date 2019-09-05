@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("product")
 public class ProductController {
@@ -22,7 +23,10 @@ public class ProductController {
     public void save(@Valid @RequestBody ProductRequest request) throws IOException {
         productService.save(request);
     }
-
+    @PutMapping
+    public void update(@Valid @RequestBody ProductRequest request, Long id) throws IOException {
+        productService.update(request, id);
+    }
     @GetMapping
     public PageResponse<ProductResponse> findPage(
             @RequestParam Integer page,
@@ -33,8 +37,10 @@ public class ProductController {
         return productService.findPage(page, size, fieldName, direction);
     }
 
-    @PutMapping
-    public void update(@Valid @RequestBody ProductRequest request, Long id) throws IOException {
-        productService.update(request, id);
+
+    @GetMapping("/one/{id}")
+    public ProductResponse findOne(@PathVariable Long id) {
+        return productService.findOneResponse(id);
     }
+
 }

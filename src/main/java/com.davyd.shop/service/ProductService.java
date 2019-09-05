@@ -4,6 +4,7 @@ import com.davyd.shop.dto.request.ProductRequest;
 import com.davyd.shop.dto.response.PageResponse;
 import com.davyd.shop.dto.response.ProductResponse;
 import com.davyd.shop.entity.Product;
+import com.davyd.shop.entity.Subcategory;
 import com.davyd.shop.exception.NoMatchesException;
 import com.davyd.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,10 @@ public class ProductService {
     private FileService fileService;
 
     public void save(ProductRequest request) throws IOException {
-        productRepository.save(productRequestToProduct(null, request));
+   productRepository.save(productRequestToProduct(null, request));
+    }
+    public void update(ProductRequest request, Long id) throws IOException {
+        productRepository.save(productRequestToProduct(findOne(id), request));
     }
 
     public PageResponse<ProductResponse> findPage(Integer page, Integer size, String fieldName, Sort.Direction direction) {
@@ -40,11 +45,9 @@ public class ProductService {
                 collect);
 
     }
-
-    public void update(ProductRequest request, Long id) throws IOException {
-        productRepository.save(productRequestToProduct(findOne(id), request));
+    public ProductResponse findOneResponse(Long id) {
+        return new ProductResponse(findOne(id));
     }
-
     public Product findOne(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new NoMatchesException("Product with id " + id + " not exists"));
     }

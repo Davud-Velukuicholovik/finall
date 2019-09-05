@@ -11,8 +11,5 @@ import java.util.List;
 
 @Repository
 public interface SubcategoryRepository extends JpaRepository<Subcategory, Long> {
-
-
-    @Query("from Subcategory s join s.category c where c.id=:categoryaaaId")
-    List<Subcategory> findAllByCategoryId(@Param("categoryaaaId") Long categoryId);
+    List<Subcategory> findAllByCategoryId(Long categoryId);
 }

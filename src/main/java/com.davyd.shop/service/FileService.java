@@ -12,6 +12,7 @@ import java.util.UUID;
 @Service
 public class FileService {
 
+
     public static final String IMG_DIR =
             System.getProperty("user.home") + File.separator +
                     "images" + File.separator;
@@ -52,3 +53,4 @@ public class FileService {
         }
     }
 }
+

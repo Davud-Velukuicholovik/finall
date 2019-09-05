@@ -9,9 +9,11 @@ import lombok.Setter;
 public class SubcategoryResponse {
     private Long id;
     private String name;
+    private Long categoryId;
 
     public SubcategoryResponse(Subcategory subcategory) {
         id = subcategory.getId();
         name = subcategory.getName();
+        categoryId = subcategory.getCategory().getId();
     }
 }

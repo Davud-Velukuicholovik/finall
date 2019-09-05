@@ -23,19 +23,28 @@ public class CategoryService {
         categoryRepository.save(
                 categoryRequestToCategory(null, request));
     }
+    public void update(CategoryRequest request, Long id) {
+        categoryRepository.save(categoryRequestToCategory(findOne(id), request));
+    }
 
     public List<CategoryResponse> findAll(String fieldName) {
         return categoryRepository.findAll(Sort.by(fieldName)).stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
     }
+    public List<CategoryResponse> findAllByName(String value) {
+        return categoryRepository.findAllByNameLike('%' + value + '%', Sort.by("name")).stream()
+                .map(CategoryResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public CategoryResponse findOneResponse(Long id) {
+        return new CategoryResponse(findOne(id));
+    }
+
 
     public Category findOne(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new NoMatchesException("Category with id " + id + " not exists"));
-    }
-
-    public void update(CategoryRequest request, Long id) {
-        categoryRepository.save(categoryRequestToCategory(findOne(id), request));
     }
 
     public void delete(Long id) {
@@ -47,8 +56,7 @@ public class CategoryService {
         }
     }
 
-    private Category categoryRequestToCategory(Category category,
-                                               CategoryRequest request) {
+    private Category categoryRequestToCategory(Category category, CategoryRequest request) {
         if (category == null) {
             category = new Category();
         }

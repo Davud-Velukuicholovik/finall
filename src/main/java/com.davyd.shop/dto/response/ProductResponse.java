@@ -14,7 +14,8 @@ public class ProductResponse {
     private String description;
     private String photo;
     private Double rating;
-    private Long subcategoryId;
+    private SubcategoryResponse subcategoryResponse;
+
 
     public ProductResponse(Product product) {
         id = product.getId();
@@ -23,6 +24,6 @@ public class ProductResponse {
         description = product.getDescription();
         photo = product.getPhoto();
         rating = product.getRating();
-        subcategoryId = product.getSubcategory().getId();
+        subcategoryResponse = new SubcategoryResponse(product.getSubcategory());
     }
 }

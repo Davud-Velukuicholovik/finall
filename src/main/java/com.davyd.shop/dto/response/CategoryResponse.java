@@ -1,6 +1,5 @@
 package com.davyd.shop.dto.response;
 
-
 import com.davyd.shop.entity.Category;
 import lombok.Getter;
 import lombok.Setter;

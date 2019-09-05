@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("subcategory")
 public class SubcategoryController {
@@ -24,22 +26,8 @@ public class SubcategoryController {
         subcategoryService.save(request);
     }
 
-    @DeleteMapping
-    public void delete(Long id) {
-        subcategoryService.delete(id);
-    }
-
-    @GetMapping
-    public PageResponse<SubcategoryResponse> findPage(
-            @RequestParam Integer page,
-            @RequestParam Integer size,
-            @RequestParam(defaultValue = "name") String fieldName,
-            @RequestParam(defaultValue = "ASC") Sort.Direction direction
-    ) {
-        return subcategoryService.findPage(page, size, fieldName, direction);
-    }
-    @PutMapping
-    public void update(@Valid @RequestBody SubcategoryRequest request, Long id) throws IOException {
-        subcategoryService.update(request, id);
+    @GetMapping("/byCategoryId/{categoryId}")
+    public List<SubcategoryResponse> findAllByCategoryId(@PathVariable Long categoryId) {
+        return subcategoryService.findAllByCategoryId(categoryId);
     }
 }
