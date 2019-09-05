@@ -40,6 +40,6 @@ public class Product {
     @ManyToMany(mappedBy = "favoriteProducts")
     private List<User> users = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "products")
-//    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "products")
+    private List<Comment> comments = new ArrayList<>();
 }

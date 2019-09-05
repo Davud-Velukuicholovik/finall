@@ -8,9 +8,9 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class UserRequest {
-    @NotBlank
+//    @NotBlank
     private String username;
-    @NotBlank
+//    @NotBlank
     private String password;
 
 

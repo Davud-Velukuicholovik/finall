@@ -40,6 +40,6 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<ProductCount> productCounts = new ArrayList<>();
-//    @ManyToOne
-//    private User users;
+    @ManyToOne
+    private User users;
 }
