@@ -30,9 +30,6 @@ public class Order {
     @Future
     private LocalDate date;
     @NotNull
-    @Positive
-    private Long sum;
-    @NotNull
     @NumberFormat
     private String phoneNumber;
     @NotNull

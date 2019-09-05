@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>category</title>
+</head>
+<body>
+<div class="create-container" style="display: none">
+    <input type="text" id="name-input">
+    <button id="send-btn">SEND</button>
+    <button id="clear-btn">CLEAR</button>
+    <div class="hint"></div>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>Actions <button id="open-create-form">Create</button></td>
+    </tr>
+    </thead>
+    <tbody class="categories"></tbody>
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    const HOST = 'http://localhost:8080';
+
+    const $table = $('.categories');
+    const $nameInput = $('#name-input');
+    const $sendBtn = $('#send-btn');
+    const $createContainer = $('.create-container');
+
+    const deleteRequest = id => {
+        $.ajax({
+            url:  `${HOST}/category?id=${id}`,
+            type: 'DELETE',
+            success: res => {
+                getCategories();
+            },
+            error: err => {
+                console.log(err)
+                alert('Something went wrong')
+            }
+        });
+    };
+
+    const onClickDeleteBtn = _ => {
+        $('.delete-btn').click(e => {
+            const id = e.target.getAttribute('data-id');
+            deleteRequest(id);
+        })
+    };
+
+    const onClickUpdateBtn = _ => {
+        $('.update-btn').click(e => {
+            $createContainer.slideDown();
+            const id = e.target.getAttribute('data-id');
+            initUpdateFrom(id);
+        })
+    };
+
+    const initUpdateFrom = (id) => {
+        $.ajax({
+            url:  `${HOST}/category/one/${id}`,
+            type: 'GET',
+            success: res => {
+                $nameInput.val(res.name);
+                $sendBtn.attr('data-id', id);
+            },
+            error: err => {
+                console.log(err)
+                alert('Something went wrong')
+            }
+        });
+    };
+
+    const appendCategory = (category) => {
+        $table.append(`
+            <tr>
+                <td>${category.id}</td>
+                <td>${category.name}</td>
+                <td>
+                    <button data-id="${category.id}" class="delete-btn">DELETE</button>
+                    <button data-id="${category.id}" class="update-btn">UPDATE</button>
+                </td>
+            </tr>
+        `)
+    };
+
+    const appendCategories = categories => {
+        for (const category of categories) {
+            appendCategory(category);
+        }
+    };
+
+    const getCategories = _ => {
+        $.ajax({
+            url:  `${HOST}/category`,
+            type: 'GET',
+            success: res => {
+                console.log(res);
+                $table.html('');
+                appendCategories(res);
+                onClickDeleteBtn();
+                onClickUpdateBtn();
+            },
+            error: err => {
+                console.log(err)
+                alert('Something went wrong')
+            }
+        });
+    };
+
+    $('#open-create-form').click(e => {
+        $createContainer.slideToggle();
+    });
+
+    $sendBtn.click(e => {
+        const request = {
+            contentType: 'application/json',
+            data: JSON.stringify({
+                name: $nameInput.val()
+            }),
+            success: res => {
+                clearForm();
+                getCategories();
+            },
+            error: err => {
+                console.log(err);
+                alert('Something went wrong')
+            }
+        };
+
+        const id = $sendBtn.attr('data-id');
+        if (!id) {
+            $.ajax({
+                ...request,
+                url:  `${HOST}/category`,
+                type: 'POST'
+            });
+        } else {
+            $.ajax({
+                ...request,
+                url:  `${HOST}/category?id=${id}`,
+                type: 'PUT',
+            });
+        }
+    });
+
+    const clearForm = _ => {
+        $nameInput.val('');
+        $sendBtn.attr('data-id', '');
+    };
+
+    $('#clear-btn').click(clearForm);
+
+    getCategories();
+</script>
+
+<script>
+    $('#name-input').keypress(e => {
+        $.ajax({
+            url: `http://localhost:8080/category/byName?value=${e.target.value}`,
+            type: 'get',
+            success: res => {
+                const $hint = $('.hint');
+                $hint.html('');
+                for (const category of res) {
+                    $hint.append(`<p>${category.id}. ${category.name}</p>`)
+                }
+            },
+            error: err => {
+                console.log(err);
+                alert('Something went wrong')
+            }
+        })
+    });
+    $('#name-input').focusout(_ => {
+        $('.hint').html('');
+    })
+</script>
+</body>
+</html>

@@ -24,8 +24,8 @@ public class User {
     @ManyToMany
     private List<Product> favoriteProducts = new ArrayList<>();
 //////////////////////
-//    @OneToMany(mappedBy = "user")
-//    private List<Comment> comments = new ArrayList<>();
-//    @OneToMany(mappedBy = "users")
-//    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "users")
+    private List<Order> orders = new ArrayList<>();
 }

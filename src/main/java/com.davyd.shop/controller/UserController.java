@@ -26,7 +26,6 @@ public class UserController {
     public List<UserResponse> findAll(@RequestParam(defaultValue = "id") String fieldName) {
         return userService.findAll(fieldName);
     }
-/////////////////
     @PutMapping
     public void update(@Valid @RequestBody UserRequest request, Long id) {
         userService.update(request, id);

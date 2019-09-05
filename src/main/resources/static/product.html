@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<div class="create-form">
+    <div>
+        <input id="create-form_name-input" placeholder="Name">
+    </div>
+    <div>
+        <input id="create-form_price-input" type="number" placeholder="Price">
+    </div>
+    <div>
+        <input id="create-form_rating-input" type="number" placeholder="Rating">
+    </div>
+    <div>
+        <input id="create-form_img-input" type="file" multiple>
+    </div>
+    <div>
+        <label for="create-form_category-select">Category</label>
+        <select id="create-form_category-select"></select>
+    </div>
+    <div>
+        <label for="create-form_subcategory-select">Subcategory</label>
+        <select id="create-form_subcategory-select" disabled></select>
+    </div>
+    <div>
+        <label for="create-form_description-input">Description</label>
+        <br>
+        <textarea id="create-form_description-input"></textarea>
+    </div>
+    <div>
+        <button id="create-form_send-btn">Send</button>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>NAME</td>
+            <td>PRICE</td>
+            <td>RATING</td>
+            <td>DESCRIPTION</td>
+            <td>IMG</td>
+            <td>ACTIONS</td>
+        </tr>
+    </thead>
+    <tbody class="products"></tbody>
+</table>
+
+<script src="js/utils.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    const HOST = 'http://localhost:8080';
+
+    const $form = $('.create-form');
+    const $nameInput = $('#create-form_name-input');
+    const $priceInput = $('#create-form_price-input');
+    const $imgInput = $('#create-form_img-input');
+    const $ratingInput = $('#create-form_rating-input');
+    const $categorySelect = $('#create-form_category-select');
+    const $subcategorySelect = $('#create-form_subcategory-select');
+    const $descriptionInput = $('#create-form_description-input');
+    const $sendBtn = $('#create-form_send-btn');
+    const $products = $('.products');
+
+    const appendProduct = product => {
+        $products.append(`
+            <tr>
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>${product.price}</td>
+                <td>${product.rating}</td>
+                <td>${product.description}</td>
+                <td><img width="100" src="${HOST}/images/${product.photo}"></td>
+                <td><button class="update-btn" data-id="${product.id}">UPDATE</button></td>
+            </tr>
+        `);
+    };
+
+    const getProducts = () => {
+        $.ajax({
+            url: `${HOST}/product?page=0&size=100`,
+            type: 'GET',
+            success: res => {
+                $products.html('');
+                for (const product of res.data) {
+                    appendProduct(product);
+                }
+                $('.update-btn').click(onUpdateClick);
+            },
+            error: appHandleError
+        })
+    };
+
+    const getCategories = () => {
+        $.ajax({
+            url: `${HOST}/category`,
+            type: 'GET',
+            success: res => {
+                $categorySelect.html('<option disabled selected>Select category</option>');
+                for (const category of res) {
+                    $categorySelect.append(`<option value="${category.id}">${category.name}</option>`)
+                }
+            },
+            error: appHandleError
+        })
+    };
+
+    const onCategorySelect = subcategoryId => {
+        $.ajax({
+            url: `${HOST}/subcategory/byCategoryId/${$categorySelect.val()}`,
+            type: 'GET',
+            success: res => {
+                $subcategorySelect.html('');
+                for (const subcategory of res) {
+                    $subcategorySelect.append(`<option value="${subcategory.id}">${subcategory.name}</option>`)
+                }
+                $subcategorySelect[0].removeAttribute('disabled');
+                $subcategorySelect.val(subcategoryId || '');
+            },
+            error: appHandleError
+        })
+    };
+
+    const onSendClick = e => {
+        const id = $sendBtn.attr('data-id');
+        const data = {
+            price: $priceInput.val(),
+            rating: $ratingInput.val(),
+            description: $descriptionInput.val(),
+            subcategoryId: $subcategorySelect.val(),
+            name: $nameInput.val()
+        };
+        const request = {
+            contentType: 'application/json',
+            success: () => {
+                clearFields();
+                getProducts();
+            },
+            error: appHandleError
+        };
+        // console.log($imgInput[0].files)
+        appGetBase64($imgInput[0].files[0])
+            .then(img => data.photo = img)
+            .catch()
+            .finally(_ => {
+                if (id) {
+                    $.ajax({
+                        ...request,
+                        url: `${HOST}/product?id=${id}`,
+                        type: 'PUT',
+                        data: JSON.stringify(data)
+                    })
+                } else {
+                    $.ajax({
+                        ...request,
+                        url: `${HOST}/product`,
+                        type: 'POST',
+                        data: JSON.stringify(data)
+                    })
+                }
+            })
+    };
+
+    const onUpdateClick = e => {
+        const id = e.target.getAttribute('data-id');
+        $.ajax({
+            url: `${HOST}/product/one/${id}`,
+            type: 'GET',
+            success: res => {
+                $nameInput.val(res.name);
+                $priceInput.val(res.price);
+                $ratingInput.val(res.rating);
+                $categorySelect.val(res.subcategoryResponse.categoryId);
+                onCategorySelect(res.subcategoryResponse.id);
+                $descriptionInput.val(res.description);
+                $sendBtn.attr('data-id', id);
+            },
+            error: appHandleError
+        })
+    };
+
+    const clearFields = () => {
+        $nameInput.val('');
+        $priceInput.val('');
+        $ratingInput.val('');
+        $descriptionInput.val('');
+        $subcategorySelect.val('');
+        $subcategorySelect.attr('disabled', 'true');
+        $categorySelect.val('');
+        $sendBtn.attr('data-id', '');
+    };
+
+    $categorySelect.change(onCategorySelect);
+    $sendBtn.click(onSendClick);
+    getCategories();
+    getProducts();
+</script>
+</body>
+</html>
