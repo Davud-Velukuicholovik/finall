@@ -29,11 +29,6 @@ public class OrderController {
         return orderService.findAll();
     }
 
-//    @GetMapping("/byUser")
-//    public List<OrderResponse> findAllByName(@RequestParam String value) {
-//        return orderService.findAllByName(value);
-//    }
-
     @DeleteMapping
     public void delete(Long id) {
         orderService.deleteOrder(id);
@@ -52,9 +47,9 @@ public class OrderController {
     public void update(@Valid @RequestBody OrderRequest request, Long id) throws IOException {
         orderService.update(request, id);
     }
-//
-////@GetMapping("/byUserId/{userId}")
-////public List<OrderResponse> findAllByUserId(@PathVariable Long userId) {
-////    return orderService.findAllByUserId(userId);
-////}
+
+@GetMapping("/byUserId/{userId}")
+public List<OrderResponse> findAllByUsersId(@PathVariable Long userId) {
+    return orderService.findAllByUsersId(userId);
+}
 }

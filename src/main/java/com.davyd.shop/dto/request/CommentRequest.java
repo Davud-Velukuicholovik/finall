@@ -14,4 +14,6 @@ public class CommentRequest {
 
     @NotNull
     private Long productId;
+    @NotNull
+    private Long userId;
 }

@@ -36,4 +36,8 @@ public class SubcategoryService {
         return subcategoryRepository.findAllByCategoryId(categoryId).stream().
                 map(SubcategoryResponse::new).collect(Collectors.toList());
     }
+    public List<SubcategoryResponse> findAll() {
+        return subcategoryRepository.findAll().stream()
+                .map(SubcategoryResponse::new).collect(Collectors.toList());
+    }
 }

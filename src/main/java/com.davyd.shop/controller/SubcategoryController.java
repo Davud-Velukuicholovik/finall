@@ -30,4 +30,8 @@ public class SubcategoryController {
     public List<SubcategoryResponse> findAllByCategoryId(@PathVariable Long categoryId) {
         return subcategoryService.findAllByCategoryId(categoryId);
     }
+    @GetMapping
+    public List<SubcategoryResponse> findAll() {
+        return subcategoryService.findAll();
+    }
 }

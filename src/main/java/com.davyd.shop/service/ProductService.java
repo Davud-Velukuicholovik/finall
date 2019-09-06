@@ -40,9 +40,7 @@ public class ProductService {
     public PageResponse<ProductResponse> findPage(Integer page, Integer size, String fieldName, Sort.Direction direction) {
         Page<Product> data = productRepository.findAll(PageRequest.of(page, size, direction, fieldName));
         List<ProductResponse> collect = data.get().map(ProductResponse::new).collect(Collectors.toList());
-        return new PageResponse<>(data.getTotalElements(),
-                data.getTotalPages(),
-                collect);
+        return new PageResponse<>(data.getTotalElements(),data.getTotalPages(),collect);
 
     }
     public ProductResponse findOneResponse(Long id) {

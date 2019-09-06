@@ -24,14 +24,10 @@ public class OrderService {
 
     @Autowired
     private UserService userService;
-//
+
 //    @Autowired
 //    private FileService fileService;
 
-
-//        public void save(OrderRequest request) throws IOException {
-//        orderRepository.save(orderRequestToOrder(null, request));
-//    }
     public void save(OrderRequest request) {
         Order order = new Order();
         order.setPhoneNumber(request.getPhoneNumber());
@@ -48,21 +44,11 @@ public List<OrderResponse> findAll() {
         return orderRepository.findAll().stream()
                 .map(OrderResponse::new).collect(Collectors.toList());
 }
-    public List<OrderResponse> findAllByName(String value) {
-        return orderRepository.findAllByUsersContaining('%' + value + '%', Sort.by("name")).stream()
-                .map(OrderResponse::new).collect(Collectors.toList());
-    }
-
 //    public PageResponse<OrderResponse> findPage(Integer page, Integer size, String fieldName, Sort.Direction direction) {
-//        Page<Order> daata = orderRepository.findAll(PageRequest.of(page, size, direction, fieldName));
-//        List<OrderResponse> collect = daata.get().map(OrderResponse::new).collect(Collectors.toList());
-//        return new PageResponse<>(daata.getTotalElements(),
-//                daata.getTotalPages(),
-//                collect);
+//        Page<Order> data = orderRepository.findAll(PageRequest.of(page, size, direction, fieldName));
+//        List<OrderResponse> collect = data.get().map(OrderResponse::new).collect(Collectors.toList());
+//        return new PageResponse<>(data.getTotalElements(),data.getTotalPages(),collect);
 //    }
-
-
-
     public Order findOne(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new NoMatchesException("Order with id " + id + " not exists"));
     }
@@ -83,8 +69,8 @@ public List<OrderResponse> findAll() {
     }
 
 
-////    public List<OrderResponse> findAllByUserId(Long userId) {
-////        return orderRepository.findAllByUserId(userId).stream().
-////                map(OrderResponse::new).collect(Collectors.toList());
-////    }
+    public List<OrderResponse> findAllByUsersId(Long userId) {
+        return orderRepository.findAllByUsersId(userId).stream().
+                map(OrderResponse::new).collect(Collectors.toList());
+    }
 }

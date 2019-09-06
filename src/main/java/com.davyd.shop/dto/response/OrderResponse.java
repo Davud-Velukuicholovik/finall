@@ -12,13 +12,13 @@ public class OrderResponse {
     private LocalDate date;
     private String phoneNumber;
     private String address;
-    private Long userId;
+    private UserResponse userResponse;
 
     public OrderResponse(Order order) {
         id = order.getId();
         date = order.getDate();
         phoneNumber = order.getPhoneNumber();
         address = order.getAddress();
-        userId = order.getUsers().getId();
+        userResponse = new UserResponse(order.getUsers());
     }
 }
